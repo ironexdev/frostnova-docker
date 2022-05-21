@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      args:
+        APP_CONTEXT_PATH: .
+        DOCKER_IMAGE_CONTEXT_PATH: ./docker/images
+      context: .
+      dockerfile: ./docker/images/app/Dockerfile
+    container_name: frostnova_app
+    environment:
+      ENVIRONMENT: "development"
+      ERROR_REPORTING: "true"
+      FORCE_HTTPS: "false"
+    networks:
+      - external
+      - internal
+    volumes:
+      - .:/app
+      - ./docker/images/app/php.ini:/usr/local/etc/php/php.ini
+      - ./var/log:/var/log
+
+  http-proxy:
+    build:
+      args:
+        DOCKER_IMAGE_CONTEXT_PATH: ./docker/images
+      context: .
+      dockerfile: ./docker/images/http-proxy/Dockerfile
+    container_name: frostnova_http-proxy
+    networks:
+      - external
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    volumes:
+      - ./docker/images/http-proxy/default.conf:/etc/nginx/conf.d/default.conf
+      - ./var/log/nginx:/var/log/nginx
+
+networks:
+  internal:
+  external:
