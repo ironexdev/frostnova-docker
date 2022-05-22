@@ -1,0 +1,13 @@
+{
+  "name": "frostnova/docker",
+  "type": "project",
+  "description": "Docker for Frostnova - a fully customizable PSR compatible PHP framework.",
+  "config": {
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true
+    }
+  },
+  "license": "MIT"
+}
+
+
